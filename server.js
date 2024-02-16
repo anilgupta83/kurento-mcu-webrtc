@@ -226,7 +226,7 @@ function start(sessionId, websocketId, ws, sdpOffer, callback) {
                         return callback(error);
                     }
 
-                    webRtcEndpoint.on('OnIceCandidate', function(event) {
+                    webRtcEndpoint.on('IceCandidateFound', function(event) {
                         var candidate = kurento.register.complexTypes.IceCandidate(event.candidate);
                         ws.send(JSON.stringify({
                             id : 'iceCandidate',
@@ -272,12 +272,12 @@ function createMediaElements(pipeline, ws, callback) {
               return callback(error);
           }
           var maxbps = Math.floor( BIT_RATE * kilo);
-          webRtcEndpoint.setMinOutputBitrate(maxbps, function (error) {
+          webRtcEndpoint.setMinEncoderBitrate(maxbps, function (error) {
               //console.log('[media] Min Output Bitrate (bps) ' + maxbps);
               if (error) {
                 console.log('[media]  Error: ' + error);
               }
-              webRtcEndpoint.setMaxOutputBitrate(maxbps, function (error) {
+              webRtcEndpoint.setMaxEncoderBitrate(maxbps, function (error) {
                 //console.log('[media] Min Output Bitrate (bps) ' + maxbps);
                 if (error) {
                   console.log('[media]  Error: ' + error);
@@ -287,8 +287,8 @@ function createMediaElements(pipeline, ws, callback) {
                     if (error){
                       return callback(error);
                     }
-                    hubPort.setMinOutputBitrate(maxbps, function (error) {
-                      hubPort.setMaxOutputBitrate(maxbps, function (error){
+                    hubPort.setMinEncoderBitrate(maxbps, function (error) {
+                      hubPort.setMaxEncoderBitrate(maxbps, function (error){
                         return callback(null, webRtcEndpoint, hubPort);
                       });
                     });
@@ -310,15 +310,15 @@ function createMediaElements(pipeline, ws, callback) {
                         }
 
                         compositeHub.outputVideoPort = _outputVideoPort;
-                        _outputVideoPort.setMinOutputBitrate(maxbps, function (error) {
-                          _outputVideoPort.setMaxOutputBitrate(maxbps, function (error){
+                        _outputVideoPort.setMinEncoderBitrate(maxbps, function (error) {
+                          _outputVideoPort.setMaxEncoderBitrate(maxbps, function (error){
 
                             composite.createHubPort(function(error, hubPort){
                               if (error){
                                 return callback(error);
                               }
-                              hubPort.setMinOutputBitrate(maxbps, function (error) {
-                                hubPort.setMaxOutputBitrate(maxbps, function (error){
+                              hubPort.setMinEncoderBitrate(maxbps, function (error) {
+                                hubPort.setMaxEncoderBitrate(maxbps, function (error){
                                   return callback(null, webRtcEndpoint, hubPort);
                                 });
                               });
@@ -331,8 +331,8 @@ function createMediaElements(pipeline, ws, callback) {
                       if (error){
                         return callback(error);
                       }
-                      hubPort.setMinOutputBitrate(maxbps, function (error) {
-                        hubPort.setMaxOutputBitrate(maxbps, function (error){
+                      hubPort.setMinEncoderBitrate(maxbps, function (error) {
+                        hubPort.setMaxEncoderBitrate(maxbps, function (error){
                           return callback(null, webRtcEndpoint, hubPort);
                         });
                       });
